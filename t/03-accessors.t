@@ -1,0 +1,46 @@
+#
+# Checking the getters
+#
+use v6;
+use Test;
+use Date::Calendar::Gregorian;
+
+plan 26;
+
+my Date::Calendar::Gregorian $d .= new('2020-02-02');
+
+is($d.month      ,    2);
+is($d.day        ,    2);
+is($d.year       , 2020);
+is($d.gist       , '2020-02-02');
+is($d.locale     , 'en');
+is($d.month-abbr , 'Feb');
+is($d.month-name , 'February');
+is($d.day-of-week, 7);
+is($d.day-name   , 'Sunday');
+is($d.day-of-year, 33);
+is($d.day-abbr   , 'Sun');
+
+$d.locale = 'it';
+is($d.locale    , 'it');
+is($d.month-name, 'Febbraio');
+is($d.day-name  , 'domenica');
+is($d.month-abbr, Nil);
+is($d.day-abbr  , Nil);
+
+$d.locale = 'es';
+is($d.locale    , 'es');
+is($d.month-name, 'febrero');
+is($d.day-name  , 'domingo');
+is($d.month-abbr, 'feb');
+is($d.day-abbr  , 'dom');
+
+$d.locale = 'fr';
+is($d.locale    , 'fr');
+is($d.month-name, 'février');
+is($d.day-name  , 'dimanche');
+is($d.month-abbr, 'FR');
+is($d.day-abbr  , 'dim');
+
+
+done-testing;
