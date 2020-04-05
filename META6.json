@@ -1,19 +1,31 @@
 {
+  "auth"    : "cpan:JFORGET",
   "authors" : [
     "Jean Forget"
   ],
   "build-depends" : [ ],
-  "depends" : [ ],
-  "description" : "blah blah blah",
-  "license" : "Artistic-2.0",
-  "name" : "Date::Calendar::Gregorian",
-  "perl" : "6.c",
+  "depends"       : [
+      "Date::Names"
+    , "Date::Calendar::Strftime"
+  ],
+  "description" : "Extending the core class 'Date' with strftime and conversions with other calendars",
+  "license"     : "Artistic-2.0",
+  "name"        : "Date::Calendar::Gregorian",
+  "perl"        : "6.c",
   "provides" : {
     "Date::Calendar::Gregorian" : "lib/Date/Calendar/Gregorian.pm6"
   },
-  "resources" : [ ],
-  "source-url" : "",
-  "tags" : [ ],
-  "test-depends" : [ ],
+  "resources"  : [ ],
+  "source-url" : "https://github.com/jforget/raku-Date-Calendar-Gregorian.git",
+  "support" : {
+    "email" : "JFORGET@cpan.org"
+  },
+  "tags" : [
+      "date"
+    , "calendar"
+  ],
+  "test-depends" : [ 
+      "Test::META"
+  ],
   "version" : "0.0.1"
 }
