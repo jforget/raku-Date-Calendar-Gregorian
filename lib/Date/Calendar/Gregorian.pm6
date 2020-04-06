@@ -89,6 +89,7 @@ my $month = $locale.mon($date.month);
 $date does Date::Calendar::Strftime;
 
 say $date.strftime("$day %d $month %Y");
+# --> dimanche 05 avril 2020
 
 =end code
 
@@ -378,6 +379,16 @@ Dershowitz  and Edward  M. Reingold,  Cambridge University  Press, see
 L<http://www.calendarists.com> or
 L<https://www.cambridge.org/us/academic/subjects/computer-science/computing-general-interest/calendrical-calculations-ultimate-edition-4th-edition?format=PB&isbn=9781107683167>.
 
+=item * I<La saga des calendriers>, by Jean Lefort, published by I<Belin> (I<Pour la Science>), ISBN 2-90929-003-5
+See L<https://www.belin-editeur.com/la-saga-des-calendriers>
+
+=item * I<Le Calendrier>, by Paul Couderc, published by I<Presses universitaires de France> (I<Que sais-je ?>), ISBN 2-13-036266-4
+See L<https://catalogue.bnf.fr/ark:/12148/cb329699661>.
+
+=head2 Internet
+
+=item * L<https://www.tondering.dk/claus/calendar.html> - Claus Tøndering's
+calendar FAQ, especially the page L<https://www.tondering.dk/claus/cal/gregorian.php>.
 
 =head1 AUTHOR
 
