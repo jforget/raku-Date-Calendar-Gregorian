@@ -346,6 +346,20 @@ The year as a decimal number.
 
 A literal `%' character.
 
+=head1 ISSUES
+
+In  the parent  class,  objects  are immutable.  You  cannot change  a
+"Sunday  5 April  2020" into  "Monday 6  April 2020".  In this  class,
+objects are no longer completely  immutable. You still cannot change a
+"Sunday 5 April  2020" object into "Monday 6 April  2020", but you can
+change this "Sunday 5 April 2020"  object into "dimanche 5 avril 2020"
+or "domingo 5 abril 2020".
+
+This  may be  no big  deal,  but in  some  cases it  may prevent  some
+optimisations from being applied or it may enable thread-related bugs.
+I am no expert on this but  I think you cannot blindly change all your
+uses of C<Date> into uses of C<Date::Calendar::Gregorian>.
+
 =head1 SEE ALSO
 
 =head2 Raku Software
