@@ -39,6 +39,16 @@ method day-abbr {
       // $::($class)::dowa[$index];
 }
 
+method new-from-date($date) {
+  $.new-from-daycount($date.daycount);
+}
+
+method to-date($class = 'Date') {
+  # See "Learning Perl 6" page 177
+  my $d = ::($class).new-from-daycount($.daycount);
+  return $d;
+}
+
 sub check-locale ($locale) {
   unless grep { $_ eq $locale }, @Date::Names::langs {
     X::Invalid::Value.new(:method<BUILD>, :name<locale>, :value($locale)).throw;
