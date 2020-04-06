@@ -122,7 +122,7 @@ other C<Date::Calendar::>R<xxx> classes.
 For  the  documentation  of  most   methods  and  functions,  see  the
 documentation of C<Date>. Here are the new ones.
 
-=head2 Constructor
+=head2 Constructors
 
 =head3 new-from-date
 
@@ -133,6 +133,22 @@ with a C<daycount> method.
 
 This method does not allow a  C<locale> build parameter. The object is
 built with the default locale, C<'en'>.
+
+=head3 new
+
+Actually, C<new> is the constructor for the parent core class C<Date>.
+Yet, every  form of this  multi-method accepts a  C<locale> parameter.
+All the variants below gives the same date, with different locales:
+
+=begin code :lang<perl6>
+
+my Date::Calendar::Gregorian $d1 .= new('2020-02-02'                        , locale => 'fr');
+my Date::Calendar::Gregorian $d2 .= new( 2020, 2, 2                         , locale => 'es');
+my Date::Calendar::Gregorian $d3 .= new(year => 2020, month => 2, day => 2  , locale => 'de');
+my Date::Calendar::Gregorian $d4 .= new(Instant.from-posix(1580602000      ), locale => 'it');
+my Date::Calendar::Gregorian $d5 .= new(DateTime.new('2020-02-02T12:00:00Z'), locale => 'nl');
+
+=end code
 
 =head2 Accessors
 
