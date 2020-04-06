@@ -57,7 +57,7 @@ sub check-locale ($locale) {
 }
 
 method !lazy-instance {
-  $.locale //= 'en';
+  $.locale              //= 'en';
   $!instantiated-locale //= '';
   if $.locale ne $!instantiated-locale {
     $!date-names = Date::Names.new(lang => $.locale);
@@ -100,6 +100,7 @@ use Date::Calendar::Gregorian;
 my Date::Calendar::Gregorian $date .= new('2020-04-05');
 $date.locale = 'fr';
 say $date.strftime("%A %d %B %Y");
+# --> dimanche 05 avril 2020
 
 =end code
 
@@ -108,6 +109,275 @@ say $date.strftime("%A %d %B %Y");
 Date::Calendar::Gregorian is a  child class to the  core class 'Date',
 to extend  it with the  string-generation method C<strftime>  and with
 the conversion methods C<new-from-date> and C<to-date>.
+
+The  core class  C<Date> is  very good  at number  crunching and  date
+computations,  but it  lacks facilities  with string  generation. This
+module, which invokes  the C<Date::Calendar::Strftime>, glues together
+the core class C<Date> and the utility module C<Date::Names>.
+
+In addition,  this class declares methods  to convert dates from  / to
+other C<Date::Calendar::>R<xxx> classes.
+
+For  the  documentation  of  most   methods  and  functions,  see  the
+documentation of C<Date>. Here are the new ones.
+
+=head2 Constructor
+
+=head3 new-from-date
+
+Build a Gregorian  date by cloning an object from  another class. This
+other class can be the core class C<Date> (but why would you convert a
+Gregorian date into Gregorian?) or any C<Date::Calendar::>R<xxx> class
+with a C<daycount> method.
+
+This method does not allow a  C<locale> build parameter. The object is
+built with the default locale, C<'en'>.
+
+=head2 Accessors
+
+=head3 locale
+
+The two-char  string defining the  locale used  for the date.  Use any
+value allowed by the module C<Date::Names>.
+
+This attribute can be updated after build time.
+
+=head3 month-name
+
+The month of the date, as a string. This depends on the date's current
+locale.
+
+=head3 month-abbr
+
+The abbreviated month of the date.
+
+Depending on the locale, it may be a 3-char string, a 2-char string or
+a short string  of variable length. Please refer  to the documentation
+of  C<Date::Names>  for  the  availability  of  C<mon3>,  C<mon2>  and
+C<mona>.
+
+=head3 day-name
+
+The name of the day within the  week. It depends on the date's current
+locale.
+
+=head3 day-abbr
+
+The abbreviated day name of the date.
+
+Depending on the locale, it may be a 3-char string, a 2-char string or
+a short code of variable length.  Please refer to the documentation of
+C<Date::Names> for the availability of C<dow3>, C<dow2> and C<dowa>.
+
+=head2 Other Methods
+
+=head3 to-date
+
+Clones the  date into a C<Date::Calendar::>R<xxx>  compatible calendar
+class. The target class name is  given as a positional parameter. This
+parameter  is  optional,  the  default  value  is  C<"Date">  for  the
+Gregorian calendar, which  is not very useful but which  at least does
+not depend on  which modules are installed on your  system and is sure
+to be available.
+
+To convert a date from a  calendar to another, you have two conversion
+styles,  a "push"  conversion and  a "pull"  conversion. For  example,
+while  converting  "1st February  2020"  to  the French  Revolutionary
+calendar, you can code:
+
+=begin code :lang<perl6>
+
+use Date::Calendar::Gregorian;
+use Date::Calendar::FrenchRevolutionary;
+
+my  Date::Calendar::Gregorian           $d-orig;
+my  Date::Calendar::FrenchRevolutionary $d-dest-push;
+my  Date::Calendar::FrenchRevolutionary $d-dest-pull;
+
+$d-orig .= new(year  => 2020
+             , month =>    2
+             , day   =>    1);
+$d-dest-push  = $d-orig.to-date("Date::Calendar::FrenchRevolutionary");
+$d-dest-pull .= new-from-date($d-orig);
+
+=end code
+
+Even  if both  calendars use  a C<locale>  attribute, when  a date  is
+created by  the conversion  of another  date, it  is created  with the
+default  locale. If  you  want the  locale to  be  transmitted in  the
+conversion, you should add this line:
+
+=begin code :lang<perl6>
+
+$d-dest-pull.locale = $d-orig.locale;
+
+=end code
+
+=head3 strftime
+
+This method is  very similar to the homonymous functions  you can find
+in several  languages (C, shell, etc).  It also takes some  ideas from
+C<printf>-similar functions. For example
+
+=begin code :lang<perl6>
+
+$df.strftime("%04d blah blah blah %-25B")
+
+=end code
+
+will give  the day number  padded on  the left with  2 or 3  zeroes to
+produce a 4-digit substring, plus the substring C<" blah blah blah ">,
+plus the month name, padded on the right with enough spaces to produce
+a 25-char substring. Thus, the whole  string will be at least 42 chars
+long.
+
+A C<strftime> specifier consists of:
+
+=item A percent sign,
+
+=item An  optional minus sign, to  indicate on which side  the padding
+occurs. If the minus sign is present, the value is aligned to the left
+and the padding spaces are added to the right. If it is not there, the
+value is aligned to the right and the padding chars (spaces or zeroes)
+are added to the left.
+
+=item  An  optional  zero  digit,  to  choose  the  padding  char  for
+right-aligned values.  If the  zero char is  present, padding  is done
+with zeroes. Else, it is done wih spaces.
+
+=item An  optional length, which  specifies the minimum length  of the
+result substring.
+
+=item  An optional  C<"E">  or  C<"O"> modifier.  On  some older  UNIX
+system,  these  were used  to  give  the I<extended>  or  I<localized>
+version  of  the date  attribute.  Here,  they rather  give  alternate
+variants of the date attribute. Not used with the Gregorian calendar.
+
+=item A mandatory type code.
+
+The allowed type codes are:
+
+=defn C<%a>
+
+The day of week name, abbreviated to 2 or 3 chars.
+
+=defn C<%A>
+
+The full day of week name.
+
+=defn C<%b>
+
+The abbreviated month name.
+
+=defn C<%B>
+
+The full month name.
+
+=defn C<%d>
+
+The day of the month as a decimal number (range 01 to 31).
+
+=defn C<%e>
+
+Like C<%d>, the  day of the month  as a decimal number,  but a leading
+zero is replaced by a space.
+
+=defn C<%f>
+
+The month as a decimal number (1  to 12). Unlike C<%m>, a leading zero
+is replaced by a space.
+
+=defn C<%F>
+
+Equivalent to %Y-%m-%d (the ISO 8601 date format)
+
+=defn C<%G>
+
+The  "week year"  as a  decimal number  for the  so-called "ISO  date"
+format.
+
+=defn C<%j>
+
+The day of the year as a decimal number (range 001 to 366).
+
+=defn C<%m>
+
+The month as a two-digit decimal  number (range 01 to 12), including a
+leading zero if necessary.
+
+=defn C<%n>
+
+A newline character.
+
+=defn C<%t>
+
+A tab character.
+
+=defn C<%u>
+
+The day of week as a 1..7 number.
+
+=defn C<%V>
+
+The week number in the so-called "ISO date" format.
+
+=defn C<%Y>
+
+The year as a decimal number.
+
+=defn C<%%>
+
+A literal `%' character.
+
+=head1 SEE ALSO
+
+=head2 Raku Software
+
+L<Date::Names>
+
+L<Date::Calendar::Strftime>
+or L<https://github.com/jforget/raku-Date-Calendar-Strftime>
+
+L<Date::Calendar::Hebrew>
+or L<https://github.com/jforget/raku-Date-Calendar-Hebrew>
+
+L<Date::Calendar::CopticEthiopic>
+or L<https://github.com/jforget/raku-Date-Calendar-CopticEthiopic>
+
+L<Date::Calendar::FrenchRevolutionary>
+or L<https://github.com/jforget/raku-Date-Calendar-FrenchRevolutionary>
+
+L<Date::Calendar::Julian>
+or L<https://github.com/jforget/raku-Date-Calendar-Julian>
+
+L<Date::Calendar::MayaAztec>
+or L<https://github.com/jforget/raku-Date-Calendar-MayaAztec>
+
+=head2 Perl 5 Software
+
+L<DateTime>
+
+L<Date::Convert>
+
+L<Date::Converter>
+
+=head2 Other Software
+
+date(1), strftime(3)
+
+F<calendar/calendar.el>  in emacs or xemacs.
+
+CALENDRICA 4.0 -- Common Lisp, which can be download in the "Resources" section of
+L<https://www.cambridge.org/us/academic/subjects/computer-science/computing-general-interest/calendrical-calculations-ultimate-edition-4th-edition?format=PB&isbn=9781107683167>
+(Actually, I have used the 3.0 version which is not longer available)
+
+=head2 Books
+
+Calendrical  Calculations   (Third  or   Fourth  Edition)   by  Nachum
+Dershowitz  and Edward  M. Reingold,  Cambridge University  Press, see
+L<http://www.calendarists.com> or
+L<https://www.cambridge.org/us/academic/subjects/computer-science/computing-general-interest/calendrical-calculations-ultimate-edition-4th-edition?format=PB&isbn=9781107683167>.
+
 
 =head1 AUTHOR
 
