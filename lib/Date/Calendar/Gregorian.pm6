@@ -98,8 +98,7 @@ Printing the date 2020-04-05 in French I<with> Date::Calendar::Gregorian
 =begin code :lang<perl6>
 
 use Date::Calendar::Gregorian;
-my Date::Calendar::Gregorian $date .= new('2020-04-05');
-$date.locale = 'fr';
+my  Date::Calendar::Gregorian $date .= new('2020-04-05', locale => 'fr');
 say $date.strftime("%A %d %B %Y");
 # --> dimanche 05 avril 2020
 
@@ -349,16 +348,22 @@ A literal `%' character.
 =head1 ISSUES
 
 In  the parent  class,  objects  are immutable.  You  cannot change  a
-"Sunday  5 April  2020" into  "Monday 6  April 2020".  In this  class,
-objects are no longer completely  immutable. You still cannot change a
-"Sunday 5 April  2020" object into "Monday 6 April  2020", but you can
-change this "Sunday 5 April 2020"  object into "dimanche 5 avril 2020"
-or "domingo 5 abril 2020".
+"Sunday 5  April 2020" C<Date> object  into "Monday 6 April  2020". In
+this  class, objects  are no  longer completely  immutable. You  still
+cannot change  a "Sunday  5 April  2020" object  into "Monday  6 April
+2020",  but you  can change  this "Sunday  5 April  2020" object  into
+"dimanche 5 avril 2020" or "domingo 5 abril 2020".
 
-This  may be  no big  deal,  but in  some  cases it  may prevent  some
+This may  seem no  big deal,  but in  some cases  it may  prevent some
 optimisations from being applied or it may enable thread-related bugs.
 I am no expert on this but  I think you cannot blindly change all your
 uses of C<Date> into uses of C<Date::Calendar::Gregorian>.
+
+Another  issue,   as  explained  in   the  C<Date::Calendar::Strftime>
+documentation. Please ensure that  format-string passed to C<strftime>
+comes from  a trusted source.  For example, by including  a outrageous
+length in  a C<strftime> specifier, you  can drain your PC's  RAM very
+fast.
 
 =head1 SEE ALSO
 
@@ -409,15 +414,15 @@ Dershowitz  and Edward  M. Reingold,  Cambridge University  Press, see
 L<http://www.calendarists.com> or
 L<https://www.cambridge.org/us/academic/subjects/computer-science/computing-general-interest/calendrical-calculations-ultimate-edition-4th-edition?format=PB&isbn=9781107683167>.
 
-=item * I<La saga des calendriers>, by Jean Lefort, published by I<Belin> (I<Pour la Science>), ISBN 2-90929-003-5
+I<La saga des calendriers>, by Jean Lefort, published by I<Belin> (I<Pour la Science>), ISBN 2-90929-003-5
 See L<https://www.belin-editeur.com/la-saga-des-calendriers>
 
-=item * I<Le Calendrier>, by Paul Couderc, published by I<Presses universitaires de France> (I<Que sais-je ?>), ISBN 2-13-036266-4
+I<Le Calendrier>, by Paul Couderc, published by I<Presses universitaires de France> (I<Que sais-je ?>), ISBN 2-13-036266-4
 See L<https://catalogue.bnf.fr/ark:/12148/cb329699661>.
 
 =head2 Internet
 
-=item * L<https://www.tondering.dk/claus/calendar.html> - Claus Tøndering's
+L<https://www.tondering.dk/claus/calendar.html> - Claus Tøndering's
 calendar FAQ, especially the page L<https://www.tondering.dk/claus/cal/gregorian.php>.
 
 =head1 AUTHOR

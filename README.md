@@ -27,8 +27,7 @@ Printing the date 2020-04-05 in French _with_ Date::Calendar::Gregorian
 
 ```perl6
 use Date::Calendar::Gregorian;
-my Date::Calendar::Gregorian $date .= new('2020-04-05');
-$date.locale = 'fr';
+my  Date::Calendar::Gregorian $date .= new('2020-04-05', locale => 'fr');
 say $date.strftime("%A %d %B %Y");
 # --> dimanche 05 avril 2020
 ```
