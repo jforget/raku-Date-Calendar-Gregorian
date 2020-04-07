@@ -2,7 +2,7 @@ use v6.c;
 use Date::Names;
 use Date::Calendar::Strftime;
 
-unit class Date::Calendar::Gregorian:ver<0.0.1>
+unit class Date::Calendar::Gregorian:ver<0.0.2>
         is Date
       does Date::Calendar::Strftime;
 
