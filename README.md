@@ -43,7 +43,7 @@ or
 
 ```shell
 git clone https://github.com/jforget/raku-Date-Calendar-Gregorian.git
-cd raku-Date-Calendar-Julian
+cd raku-Date-Calendar-Gregorian
 zef install .
 ```
 
