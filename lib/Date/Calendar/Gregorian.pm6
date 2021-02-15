@@ -74,7 +74,9 @@ Date::Calendar::Gregorian - Extending the core class 'Date' with strftime and co
 
 =head1 SYNOPSIS
 
-Printing the date 2020-04-05 in French I<without> Date::Calendar::Gregorian
+Here are two ways of printing the date 2020-04-05 in French.
+
+First, B<without> Date::Calendar::Gregorian
 
 =begin code :lang<perl6>
 
@@ -93,7 +95,7 @@ say $date.strftime("$day %d $month %Y");
 
 =end code
 
-Printing the date 2020-04-05 in French I<with> Date::Calendar::Gregorian
+Second, B<with> Date::Calendar::Gregorian
 
 =begin code :lang<perl6>
 
@@ -374,17 +376,20 @@ L<Date::Names>
 L<Date::Calendar::Strftime>
 or L<https://github.com/jforget/raku-Date-Calendar-Strftime>
 
+L<Date::Calendar::Julian>
+or L<https://github.com/jforget/raku-Date-Calendar-Julian>
+
 L<Date::Calendar::Hebrew>
 or L<https://github.com/jforget/raku-Date-Calendar-Hebrew>
+
+L<Date::Calendar::Hijri>
+or L<https://github.com/jforget/raku-Date-Calendar-Hijri>
 
 L<Date::Calendar::CopticEthiopic>
 or L<https://github.com/jforget/raku-Date-Calendar-CopticEthiopic>
 
 L<Date::Calendar::FrenchRevolutionary>
 or L<https://github.com/jforget/raku-Date-Calendar-FrenchRevolutionary>
-
-L<Date::Calendar::Julian>
-or L<https://github.com/jforget/raku-Date-Calendar-Julian>
 
 L<Date::Calendar::MayaAztec>
 or L<https://github.com/jforget/raku-Date-Calendar-MayaAztec>
@@ -431,7 +436,7 @@ Jean Forget <JFORGET@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright © 2020 Jean Forget
+Copyright (c) 2020, 2021 Jean Forget
 
 This library is  free software; you can redistribute  it and/or modify
 it under the Artistic License 2.0.

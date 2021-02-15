@@ -6,7 +6,9 @@ Date::Calendar::Gregorian - Extending the core class 'Date' with strftime and co
 SYNOPSIS
 ========
 
-Printing the date 2020-04-05 in French _without_ Date::Calendar::Gregorian
+Here are two ways of printing the date 2020-04-05 in French.
+
+First, __without__ Date::Calendar::Gregorian
 
 ```perl6
 use Date::Names;
@@ -23,7 +25,7 @@ say $date.strftime("$day %d $month %Y");
 # --> dimanche 05 avril 2020
 ```
 
-Printing the date 2020-04-05 in French _with_ Date::Calendar::Gregorian
+Second, __with__ Date::Calendar::Gregorian
 
 ```perl6
 use Date::Calendar::Gregorian;
@@ -62,7 +64,7 @@ Jean Forget <JFORGET@cpan.org>
 COPYRIGHT AND LICENSE
 =====================
 
-Copyright © 2020 Jean Forget
+Copyright (c) 2020, 2021 Jean Forget, all rights reserved.
 
 This library is  free software; you can redistribute  it and/or modify
 it under the Artistic License 2.0.
