@@ -1,7 +1,9 @@
 Revision history for Date-Calendar-Gregorian
 
 0.0.2 released on...
-    - ...
+    - add an "api" property to the classes
+    - migration from CPAN6 to zef
+    - fewer t/*.t tests and adding xt/*.t tests
 
 0.0.1 released on Tuesday 2020-04-07
     - Initial version

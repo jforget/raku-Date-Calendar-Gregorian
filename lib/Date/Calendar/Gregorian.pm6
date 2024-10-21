@@ -2,7 +2,7 @@ use v6.c;
 use Date::Names;
 use Date::Calendar::Strftime;
 
-unit class Date::Calendar::Gregorian:ver<0.0.2>
+unit class Date::Calendar::Gregorian:ver<0.0.2>:auth<zef:jforget>:api<0>
         is Date
       does Date::Calendar::Strftime;
 
@@ -432,11 +432,11 @@ calendar FAQ, especially the page L<https://www.tondering.dk/claus/cal/gregorian
 
 =head1 AUTHOR
 
-Jean Forget <JFORGET@cpan.org>
+Jean Forget <J2N-FORGET at orange dot fr>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2020, 2021 Jean Forget
+Copyright (c) 2020, 2021, 2024 Jean Forget
 
 This library is  free software; you can redistribute  it and/or modify
 it under the Artistic License 2.0.
