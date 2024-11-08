@@ -4,23 +4,39 @@
 use v6;
 use Test;
 use Date::Calendar::Gregorian;
+use Date::Calendar::Strftime;
 
-plan 5;
+plan 10;
 
 my Date::Calendar::Gregorian $d1 .= new('2020-02-02', locale => 'fr');
-is($d1.strftime("%A %d %B %Y"), "dimanche 02 février 2020");
+is($d1.strftime("%A %d %B %Y %Ep"), "dimanche 02 février 2020 ☼");
 
 my Date::Calendar::Gregorian $d2 .= new(2020, 2, 2, locale => 'es');
-is($d2.strftime("%A %d %B %Y"), "domingo 02 febrero 2020");
+is($d2.strftime("%A %d %B %Y %Ep"), "domingo 02 febrero 2020 ☼");
 
 my Date::Calendar::Gregorian $d3 .= new(year => 2020, month => 2, day => 2, locale => 'de');
-is($d3.strftime("%A %d %B %Y"), "Sonntag 02 Februar 2020");
+is($d3.strftime("%A %d %B %Y %Ep"), "Sonntag 02 Februar 2020 ☼");
 
 my Date::Calendar::Gregorian $d4 .= new(Instant.from-posix(1580602000), locale => 'it');
-is($d4.strftime("%A %d %B %Y"), "domenica 02 Febbraio 2020");
+is($d4.strftime("%A %d %B %Y %Ep"), "domenica 02 Febbraio 2020 ☼");
 
 my Date::Calendar::Gregorian $d5 .= new(DateTime.new('2020-02-02T12:00:00Z'), locale => 'nl');
-is($d5.strftime("%A %d %B %Y"), "zondag 02 februari 2020");
+is($d5.strftime("%A %d %B %Y %Ep"), "zondag 02 februari 2020 ☼");
+
+my Date::Calendar::Gregorian $d6 .= new('2020-02-02', locale => 'fr', daypart => after-sunset);
+is($d6.strftime("%A %d %B %Y %Ep"), "dimanche 02 février 2020 ☽");
+
+my Date::Calendar::Gregorian $d7 .= new(2020, 2, 2, locale => 'es', daypart => before-sunrise);
+is($d7.strftime("%A %d %B %Y %Ep"), "domingo 02 febrero 2020 ☾");
+
+my Date::Calendar::Gregorian $d8 .= new(year => 2020, month => 2, day => 2, locale => 'de', daypart => daylight);
+is($d8.strftime("%A %d %B %Y %Ep"), "Sonntag 02 Februar 2020 ☼");
+
+my Date::Calendar::Gregorian $d9 .= new(Instant.from-posix(1580602000), locale => 'it', daypart => after-sunset);
+is($d9.strftime("%A %d %B %Y %Ep"), "domenica 02 Febbraio 2020 ☽");
+
+my Date::Calendar::Gregorian $d10 .= new(DateTime.new('2020-02-02T12:00:00Z'), locale => 'nl', daypart => before-sunrise);
+is($d10.strftime("%A %d %B %Y %Ep"), "zondag 02 februari 2020 ☾");
 
 
 

@@ -4,8 +4,9 @@
 use v6;
 use Test;
 use Date::Calendar::Gregorian;
+use Date::Calendar::Strftime;
 
-plan 26;
+plan 27;
 
 my Date::Calendar::Gregorian $d .= new('2020-02-02');
 
@@ -20,6 +21,7 @@ is($d.day-of-week, 7);
 is($d.day-name   , 'Sunday');
 is($d.day-of-year, 33);
 is($d.day-abbr   , 'Sun');
+is($d.daypart    , daylight());
 
 $d.locale = 'it';
 is($d.locale    , 'it');

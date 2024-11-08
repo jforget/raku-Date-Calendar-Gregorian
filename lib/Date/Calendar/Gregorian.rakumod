@@ -6,10 +6,16 @@ unit class Date::Calendar::Gregorian:ver<0.1.0>:auth<zef:jforget>:api<1>
         is Date
       does Date::Calendar::Strftime;
 
+has Int $.daypart where { before-sunrise() ≤ $_ ≤ after-sunset() };
 has Str $.locale is rw where { check-locale($_) } = 'en';
 
 has Str         $!instantiated-locale;
 has Date::Names $!date-names;
+
+method BUILD(:$locale, :$daypart) {
+  $!daypart = $daypart // daylight();
+  $!locale  = $locale  // 'en';
+}
 
 method month-name {
   self!lazy-instance;
@@ -39,13 +45,13 @@ method day-abbr {
       // $::($class)::dowa[$index];
 }
 
-method new-from-date($date) {
+method new-from-date($date, :$daypart) {
   $.new-from-daycount($date.daycount);
 }
 
 method to-date($class = 'Date') {
   # See "Learning Perl 6" page 177
-  my $d = ::($class).new-from-daycount($.daycount);
+  my $d = ::($class).new-from-daycount($.daycount, daypart => $.daypart);
   return $d;
 }
 
@@ -130,7 +136,7 @@ documentation of C<Date>. Here are the new ones.
 Build a Gregorian  date by cloning an object from  another class. This
 other class can be the core class C<Date> (but why would you convert a
 Gregorian date into Gregorian?) or any C<Date::Calendar::>R<xxx> class
-with a C<daycount> method.
+with a C<daycount> method and hopefully a C<daypart> method.
 
 This method does not allow a  C<locale> build parameter. The object is
 built with the default locale, C<'en'>.
@@ -151,7 +157,36 @@ my Date::Calendar::Gregorian $d5 .= new(DateTime.new('2020-02-02T12:00:00Z'), lo
 
 =end code
 
+The C<new>  method accepts  also a C<daypart>  parameter, in  case the
+date would be converted to a calendar in which the days are defined as
+sunset-to-sunset. All five  variants of the C<new>  method accept this
+C<daypart> parameter.
+
+=begin code :lang<perl6>
+
+my Date::Calendar::Gregorian $d1 .= new('2020-02-02'                        , daypart => before-sunrise);
+my Date::Calendar::Gregorian $d2 .= new( 2020, 2, 2                         , daypart => daylight);
+my Date::Calendar::Gregorian $d3 .= new(year => 2020, month => 2, day => 2  , daypart => after-sunset);
+my Date::Calendar::Gregorian $d4 .= new(Instant.from-posix(1580602000      ), daypart => before-sunrise);
+my Date::Calendar::Gregorian $d5 .= new(DateTime.new('2020-02-02T12:00:00Z'), daypart => after-sunset);
+
+=end code
+
+Please note  that in  the last  two variants,  the module  ignores the
+timepart   from   the   C<Instant>    instance   and   the   substring
+C<"T12:00:00Z"> from the C<DateTime.new> parameter.
+
 =head2 Accessors
+
+=head3 daypart
+
+A  number indicating  which part  of the  day. This  number should  be
+filled   and   compared   with   the   following   subroutines,   with
+self-documenting names:
+
+=item before-sunrise
+=item daylight
+=item after-sunset
 
 =head3 locale
 
@@ -327,6 +362,23 @@ leading zero if necessary.
 
 A newline character.
 
+=defn C<%Ep>
+
+Gives a 1-char string representing the day part:
+
+=item C<☾> or C<U+263E> before sunrise,
+=item C<☼> or C<U+263C> during daylight,
+=item C<☽> or C<U+263D> after sunset.
+
+Rationale: in  C or in  other programming languages,  when C<strftime>
+deals with a date-time object, the day is split into two parts, before
+noon and  after noon. The  C<%p> specifier  reflects this by  giving a
+C<"AM"> or C<"PM"> string.
+
+The  3-part   splitting  in   the  C<Date::Calendar::>R<xxx>   may  be
+considered as  an alternate  splitting of  a day.  To reflect  this in
+C<strftime>, we use an alternate version of C<%p>, therefore C<%Ep>.
+
 =defn C<%t>
 
 A tab character.
@@ -412,7 +464,7 @@ L<Date::Converter>
 
 date(1), strftime(3)
 
-F<calendar/calendar.el>  in emacs or xemacs.
+C<calendar/calendar.el>  in emacs or xemacs.
 
 CALENDRICA 4.0 -- Common Lisp, which can be download in the "Resources" section of
 L<https://www.cambridge.org/us/academic/subjects/computer-science/computing-general-interest/calendrical-calculations-ultimate-edition-4th-edition?format=PB&isbn=9781107683167>
