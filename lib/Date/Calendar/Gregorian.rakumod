@@ -1,8 +1,8 @@
-use v6.c;
+use v6.d;
 use Date::Names;
 use Date::Calendar::Strftime;
 
-unit class Date::Calendar::Gregorian:ver<0.0.2>:auth<zef:jforget>:api<0>
+unit class Date::Calendar::Gregorian:ver<0.1.0>:auth<zef:jforget>:api<1>
         is Date
       does Date::Calendar::Strftime;
 

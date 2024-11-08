@@ -1,5 +1,5 @@
 {
-  "api"     : "0",
+  "api"     : "1",
   "auth"    : "zef:jforget",
   "authors" : [
     "Jean Forget"
@@ -12,9 +12,9 @@
   "description" : "Extending the core class 'Date' with strftime and conversions with other calendars",
   "license"     : "Artistic-2.0",
   "name"        : "Date::Calendar::Gregorian",
-  "perl"        : "6.c",
+  "perl"        : "6.d",
   "provides" : {
-    "Date::Calendar::Gregorian" : "lib/Date/Calendar/Gregorian.pm6"
+    "Date::Calendar::Gregorian" : "lib/Date/Calendar/Gregorian.rakumod"
   },
   "resources"  : [ ],
   "source-url" : "https://github.com/jforget/raku-Date-Calendar-Gregorian.git",
@@ -28,5 +28,5 @@
   "test-depends" : [
       "Test::META"
   ],
-  "version" : "0.0.2"
+  "version" : "0.1.0"
 }
