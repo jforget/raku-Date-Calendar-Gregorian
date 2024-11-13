@@ -310,59 +310,59 @@ variants of the date attribute. Not used with the Gregorian calendar.
 
 The allowed type codes are:
 
-=defn C<%a>
+=defn %a
 
 The day of week name, abbreviated to 2 or 3 chars.
 
-=defn C<%A>
+=defn %A
 
 The full day of week name.
 
-=defn C<%b>
+=defn %b
 
 The abbreviated month name.
 
-=defn C<%B>
+=defn %B
 
 The full month name.
 
-=defn C<%d>
+=defn %d
 
 The day of the month as a decimal number (range 01 to 31).
 
-=defn C<%e>
+=defn %e
 
 Like C<%d>, the  day of the month  as a decimal number,  but a leading
 zero is replaced by a space.
 
-=defn C<%f>
+=defn %f
 
 The month as a decimal number (1  to 12). Unlike C<%m>, a leading zero
 is replaced by a space.
 
-=defn C<%F>
+=defn %F
 
 Equivalent to %Y-%m-%d (the ISO 8601 date format)
 
-=defn C<%G>
+=defn %G
 
 The  "week year"  as a  decimal number  for the  so-called "ISO  date"
 format.
 
-=defn C<%j>
+=defn %j
 
 The day of the year as a decimal number (range 001 to 366).
 
-=defn C<%m>
+=defn %m
 
 The month as a two-digit decimal  number (range 01 to 12), including a
 leading zero if necessary.
 
-=defn C<%n>
+=defn %n
 
 A newline character.
 
-=defn C<%Ep>
+=defn %Ep
 
 Gives a 1-char string representing the day part:
 
@@ -379,23 +379,23 @@ The  3-part   splitting  in   the  C<Date::Calendar::>R<xxx>   may  be
 considered as  an alternate  splitting of  a day.  To reflect  this in
 C<strftime>, we use an alternate version of C<%p>, therefore C<%Ep>.
 
-=defn C<%t>
+=defn %t
 
 A tab character.
 
-=defn C<%u>
+=defn %u
 
 The day of week as a 1..7 number.
 
-=defn C<%V>
+=defn %V
 
 The week number in the so-called "ISO date" format.
 
-=defn C<%Y>
+=defn %Y
 
 The year as a decimal number.
 
-=defn C<%%>
+=defn %%
 
 A literal `%' character.
 
@@ -425,40 +425,40 @@ fast.
 
 L<Date::Names>
 
-L<Date::Calendar::Strftime>
+L<Date::Calendar::Strftime|https://raku.land/zef:jforget/Date::Calendar::Strftime>
 or L<https://github.com/jforget/raku-Date-Calendar-Strftime>
 
-L<Date::Calendar::Julian>
+L<Date::Calendar::Julian|https://raku.land/zef:jforget/Date::Calendar::Julian>
 or L<https://github.com/jforget/raku-Date-Calendar-Julian>
 
-L<Date::Calendar::Hebrew>
+L<Date::Calendar::Hebrew|https://raku.land/zef:jforget/Date::Calendar::Hebrew>
 or L<https://github.com/jforget/raku-Date-Calendar-Hebrew>
 
-L<Date::Calendar::Hijri>
+L<Date::Calendar::Hijri|https://raku.land/zef:jforget/Date::Calendar::Hijri>
 or L<https://github.com/jforget/raku-Date-Calendar-Hijri>
 
-L<Date::Calendar::CopticEthiopic>
+L<Date::Calendar::CopticEthiopic|https://raku.land/zef:jforget/Date::Calendar::CopticEthiopic>
 or L<https://github.com/jforget/raku-Date-Calendar-CopticEthiopic>
 
-L<Date::Calendar::FrenchRevolutionary>
+L<Date::Calendar::FrenchRevolutionary|https://raku.land/zef:jforget/Date::Calendar::FrenchRevolutionary>
 or L<https://github.com/jforget/raku-Date-Calendar-FrenchRevolutionary>
 
-L<Date::Calendar::MayaAztec>
+L<Date::Calendar::MayaAztec|https://raku.land/zef:jforget/Date::Calendar::MayaAztec>
 or L<https://github.com/jforget/raku-Date-Calendar-MayaAztec>
 
-L<Date::Calendar::Persian>
+L<Date::Calendar::Persian|https://raku.land/zef:jforget/Date::Calendar::Persian>
 or L<https://github.com/jforget/raku-Date-Calendar-Persian>
 
-L<Date::Calendar::Bahai>
+L<Date::Calendar::Bahai|https://raku.land/zef:jforget/Date::Calendar::Bahai>
 or L<https://github.com/jforget/raku-Date-Calendar-Bahai>
 
 =head2 Perl 5 Software
 
-L<DateTime>
+L<DateTime|https://metacpan.org/pod/DateTime>
 
-L<Date::Convert>
+L<Date::Convert|https://metacpan.org/pod/Date::Convert>
 
-L<Date::Converter>
+L<Date::Converter|https://metacpan.org/pod/Date::Converter>
 
 =head2 Other Software
 

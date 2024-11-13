@@ -1,0 +1,16 @@
+#!/bin/sh
+# -*- encoding: utf-8; indent-tabs-mode: nil -*-
+#
+# Generate the POD6 documentation for the class Date::Calendar::Gregorian
+#
+
+export DOC=$THIS_DIR/doc
+
+raku --doc=HTML lib/Date/Calendar/Gregorian.rakumod > $DOC/Gregorian.html
+
+case $1 in
+   --show)
+     cd $DOC
+     firefox Gregorian.html
+     ;;
+esac
