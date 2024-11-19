@@ -7,10 +7,20 @@ use Test;
 use lib '../version-new/lib';
 use lib 'lib';
 use Date::Calendar::Strftime;
+use Date::Calendar::Bahai;
+use Date::Calendar::Bahai::Astronomical;
+use Date::Calendar::Coptic;
+use Date::Calendar::Ethiopic;
 use Date::Calendar::Hebrew;
+use Date::Calendar::Hijri;
 use Date::Calendar::Gregorian;
+use Date::Calendar::FrenchRevolutionary;
+use Date::Calendar::FrenchRevolutionary::Arithmetic;
+use Date::Calendar::FrenchRevolutionary::Astronomical;
 use Date::Calendar::Julian;
-
+use Date::Calendar::Julian::AUC;
+use Date::Calendar::Persian;
+use Date::Calendar::Persian::Astronomical;
 
 my @data = ( (2024, 11, 12, daylight,       'he', "Yom Shlishi 11 Hes 5785 ☼" , "Tue 12 Nov 2024 ☼")
             ,(2024, 11, 12, after-sunset,   'he', "Yom Reviʻi 12 Hes 5785 ☽"  , "Tue 12 Nov 2024 ☽")
@@ -20,14 +30,58 @@ my @data = ( (2024, 11, 12, daylight,       'he', "Yom Shlishi 11 Hes 5785 ☼" 
             ,(2024, 11, 14, before-sunrise, 'he', "Yom Chamishi 13 Hes 5785 ☾", "Thu 14 Nov 2024 ☾")
             );
 my @data-to-do = (
-             (2024, 11, 13, before-sunrise, 'jl',  "Wednesday 31 Oct 2024 ☾", "Wed 13 Nov 2024 ☾")
-            ,(2024, 11, 13, daylight,       'jl',  "Wednesday 31 Oct 2024 ☼", "Wed 13 Nov 2024 ☼")
-            ,(2024, 11, 13, after-sunset,   'jl',  "Wednesday 31 Oct 2024 ☽", "Wed 13 Nov 2024 ☽")
+              (2024, 11, 13, before-sunrise, 'ba', "ʻIdál 10 Qud 0181 ☾"          , "Wed 13 Nov 2024 ☾")
+            , (2024, 11, 13, daylight,       'ba', "ʻIdál 10 Qud 0181 ☼"          , "Wed 13 Nov 2024 ☼")
+            , (2024, 11, 13, after-sunset,   'ba', "Istijlál 11 Qud 0181 ☽"       , "Wed 13 Nov 2024 ☽")
+            , (2024, 11, 13, before-sunrise, 'be', "ʻIdál 11 Qud 0181 ☾"          , "Wed 13 Nov 2024 ☾")
+            , (2024, 11, 13, daylight,       'be', "ʻIdál 11 Qud 0181 ☼"          , "Wed 13 Nov 2024 ☼")
+            , (2024, 11, 13, after-sunset,   'be', "Istijlál 12 Qud 0181 ☽"       , "Wed 13 Nov 2024 ☽")
+            , (2024, 11, 13, before-sunrise, 'co', "Peftoou 04 Hat 1741 ☾"        , "Wed 13 Nov 2024 ☾")
+            , (2024, 11, 13, daylight,       'co', "Peftoou 04 Hat 1741 ☼"        , "Wed 13 Nov 2024 ☼")
+            , (2024, 11, 13, after-sunset,   'co', "Ptiou 05 Hat 1741 ☽"          , "Wed 13 Nov 2024 ☽")
+            , (2024, 11, 13, before-sunrise, 'et', "Hamus 04 Hed 2017 ☾"          , "Wed 13 Nov 2024 ☾")
+            , (2024, 11, 13, daylight,       'et', "Hamus 04 Hed 2017 ☼"          , "Wed 13 Nov 2024 ☼")
+            , (2024, 11, 13, after-sunset,   'et', "Arb 05 Hed 2017 ☽"            , "Wed 13 Nov 2024 ☽")
+            , (2024, 11, 13, before-sunrise, 'fr', "Tridi 23 Bru 0233 ☾"          , "Wed 13 Nov 2024 ☾")
+            , (2024, 11, 13, daylight,       'fr', "Tridi 23 Bru 0233 ☼"          , "Wed 13 Nov 2024 ☼")
+            , (2024, 11, 13, after-sunset,   'fr', "Tridi 23 Bru 0233 ☽"          , "Wed 13 Nov 2024 ☽")
+            , (2024, 11, 13, before-sunrise, 'fa', "Tridi 23 Bru 0233 ☾"          , "Wed 13 Nov 2024 ☾")
+            , (2024, 11, 13, daylight,       'fa', "Tridi 23 Bru 0233 ☼"          , "Wed 13 Nov 2024 ☼")
+            , (2024, 11, 13, after-sunset,   'fa', "Tridi 23 Bru 0233 ☽"          , "Wed 13 Nov 2024 ☽")
+            , (2024, 11, 13, before-sunrise, 'fe', "Tridi 23 Bru 0233 ☾"          , "Wed 13 Nov 2024 ☾")
+            , (2024, 11, 13, daylight,       'fe', "Tridi 23 Bru 0233 ☼"          , "Wed 13 Nov 2024 ☼")
+            , (2024, 11, 13, after-sunset,   'fe', "Tridi 23 Bru 0233 ☽"          , "Wed 13 Nov 2024 ☽")
+            , (2024, 11, 13, before-sunrise, 'hi', "Yaum al-Arbi'a 11 J.A 1446 ☾" , "Wed 13 Nov 2024 ☾")
+            , (2024, 11, 13, daylight,       'hi', "Yaum al-Arbi'a 11 J.A 1446 ☼" , "Wed 13 Nov 2024 ☼")
+            , (2024, 11, 13, after-sunset,   'hi', "Yaum al-Khamees 12 J.A 1446 ☽", "Wed 13 Nov 2024 ☽")
+            , (2024, 11, 13, before-sunrise, 'jl', "Wednesday 31 Oct 2024 ☾"      , "Wed 13 Nov 2024 ☾")
+            , (2024, 11, 13, daylight,       'jl', "Wednesday 31 Oct 2024 ☼"      , "Wed 13 Nov 2024 ☼")
+            , (2024, 11, 13, after-sunset,   'jl', "Wednesday 31 Oct 2024 ☽"      , "Wed 13 Nov 2024 ☽")
+            , (2024, 11, 13, before-sunrise, 'jc', "Wednesday 31 Oct 2777 ☾"      , "Wed 13 Nov 2024 ☾")
+            , (2024, 11, 13, daylight,       'jc', "Wednesday 31 Oct 2777 ☼"      , "Wed 13 Nov 2024 ☼")
+            , (2024, 11, 13, after-sunset,   'jc', "Wednesday 31 Oct 2777 ☽"      , "Wed 13 Nov 2024 ☽")
+            , (2024, 11, 13, before-sunrise, 'pe', "Chahar shanbe 23 Aba 1403 ☾"  , "Wed 13 Nov 2024 ☾")
+            , (2024, 11, 13, daylight,       'pe', "Chahar shanbe 23 Aba 1403 ☼"  , "Wed 13 Nov 2024 ☼")
+            , (2024, 11, 13, after-sunset,   'pe', "Chahar shanbe 23 Aba 1403 ☽"  , "Wed 13 Nov 2024 ☽")
+            , (2024, 11, 13, before-sunrise, 'pa', "Chahar shanbe 23 Aba 1403 ☾"  , "Wed 13 Nov 2024 ☾")
+            , (2024, 11, 13, daylight,       'pa', "Chahar shanbe 23 Aba 1403 ☼"  , "Wed 13 Nov 2024 ☼")
+            , (2024, 11, 13, after-sunset,   'pa', "Chahar shanbe 23 Aba 1403 ☽"  , "Wed 13 Nov 2024 ☽")
             );
 
-my %class =   gr => 'Date::Calendar::Gregorian'
+my %class =   ba => 'Date::Calendar::Bahai'
+            , be => 'Date::Calendar::Bahai::Astronomical'
+            , gr => 'Date::Calendar::Gregorian'
+            , co => 'Date::Calendar::Coptic'
+            , et => 'Date::Calendar::Ethiopic'
+            , fr => 'Date::Calendar::FrenchRevolutionary'
+            , fa => 'Date::Calendar::FrenchRevolutionary::Arithmetic'
+            , fe => 'Date::Calendar::FrenchRevolutionary::Astronomical'
             , he => 'Date::Calendar::Hebrew'
+            , hi => 'Date::Calendar::Hijri'
             , jl => 'Date::Calendar::Julian'
+            , jc => 'Date::Calendar::Julian::AUC'
+            , pe => 'Date::Calendar::Persian'
+            , pa => 'Date::Calendar::Persian::Astronomical'
             ;
 
 my %ver   =   gr => '0.1.0'
