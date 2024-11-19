@@ -401,6 +401,8 @@ A literal `%' character.
 
 =head1 ISSUES
 
+=head2 Mutability
+
 In  the parent  class,  objects  are immutable.  You  cannot change  a
 "Sunday 5  April 2020" C<Date> object  into "Monday 6 April  2020". In
 this  class, objects  are no  longer completely  immutable. You  still
@@ -413,17 +415,44 @@ optimisations from being applied or it may enable thread-related bugs.
 I am no expert on this but  I think you cannot blindly change all your
 uses of C<Date> into uses of C<Date::Calendar::Gregorian>.
 
+=head2 Security issues
+
 Another  issue,   as  explained  in   the  C<Date::Calendar::Strftime>
 documentation. Please ensure that  format-string passed to C<strftime>
 comes from  a trusted source.  For example, by including  a outrageous
 length in  a C<strftime> specifier, you  can drain your PC's  RAM very
 fast.
 
+=head2 Relations with :ver<0.0.x> classes
+
+Version 0.1.0 (and API 1) was  introduced to ease the conversions with
+other calendars  in which the  day is defined as  sunset-to-sunset. If
+all C<Date::Calendar::>R<xxx> classes use version 0.1.x and API 1, the
+conversions  will be  correct. But  if some  C<Date::Calendar::>R<xxx>
+classes use version 0.0.x and API 0, there might be problems.
+
+A date from a 0.0.x class has no C<daypart> attribute. But when "seen"
+from  a  0.1.x class,  the  0.0.x  date  seems  to have  a  C<daypart>
+attribute equal to C<daylight>. When converted from a 0.1.x class to a
+0.0.x  class,  the  date  may  just  shift  from  C<after-sunset>  (or
+C<before-sunrise>) to C<daylight>, or it  may shift to the C<daylight>
+part of  the prior (or  next) date. This  means that a  roundtrip with
+cascade conversions  may give the  starting date,  or it may  give the
+date prior or after the starting date.
+
+=head2 Time
+
+This module  and the C<Date::Calendar::>R<xxx> associated  modules are
+still date  modules, they are not  date-time modules. The user  has to
+give  the C<daypart>  attribute  as a  value among  C<before-sunrise>,
+C<daylight> or C<after-sunset>. There is no provision to give a HHMMSS
+time and convert it to a C<daypart> parameter.
+
 =head1 SEE ALSO
 
 =head2 Raku Software
 
-L<Date::Names>
+L<Date::Names|https://raku.land/zef:tbrowder/Date::Names>
 
 L<Date::Calendar::Strftime|https://raku.land/zef:jforget/Date::Calendar::Strftime>
 or L<https://github.com/jforget/raku-Date-Calendar-Strftime>
