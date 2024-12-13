@@ -7,6 +7,8 @@ use Test;
 use lib '../version-old/lib';
 use lib 'lib';
 use Date::Calendar::Strftime:ver<0.1.0>;
+use Date::Calendar::Aztec;
+use Date::Calendar::Aztec::Cortes;
 use Date::Calendar::Bahai;
 use Date::Calendar::Bahai::Astronomical;
 use Date::Calendar::Coptic;
@@ -19,52 +21,75 @@ use Date::Calendar::FrenchRevolutionary::Arithmetic;
 use Date::Calendar::FrenchRevolutionary::Astronomical;
 use Date::Calendar::Julian;
 use Date::Calendar::Julian::AUC;
+use Date::Calendar::Maya;
+use Date::Calendar::Maya::Astronomical;
+use Date::Calendar::Maya::Spinden;
 use Date::Calendar::Persian;
 use Date::Calendar::Persian::Astronomical;
 
 my @data = (
-       (2024, 11, 13, before-sunrise, 'ba', "ʻIdál 10 Qud 0181"         , "Wed 13 Nov 2024 ☼", "shift to daylight")
-     , (2024, 11, 13, daylight,       'ba', "ʻIdál 10 Qud 0181"         , "Wed 13 Nov 2024 ☼", "no problem")
-     , (2024, 11, 13, after-sunset,   'ba', "ʻIdál 10 Qud 0181"         , "Wed 13 Nov 2024 ☼", "wrong intermediate date")
-     , (2024, 11, 13, before-sunrise, 'be', "ʻIdál 11 Qud 0181"         , "Wed 13 Nov 2024 ☼", "shift to daylight")
-     , (2024, 11, 13, daylight,       'be', "ʻIdál 11 Qud 0181"         , "Wed 13 Nov 2024 ☼", "no problem")
-     , (2024, 11, 13, after-sunset,   'be', "ʻIdál 11 Qud 0181"         , "Wed 13 Nov 2024 ☼", "wrong intermediate date")
-     , (2024, 11, 13, before-sunrise, 'co', "Peftoou 04 Hat 1741"       , "Wed 13 Nov 2024 ☼", "shift to daylight")
-     , (2024, 11, 13, daylight,       'co', "Peftoou 04 Hat 1741"       , "Wed 13 Nov 2024 ☼", "no problem")
-     , (2024, 11, 13, after-sunset,   'co', "Peftoou 04 Hat 1741"       , "Wed 13 Nov 2024 ☼", "wrong intermediate date")
-     , (2024, 11, 13, before-sunrise, 'et', "Hamus 04 Hed 2017"         , "Wed 13 Nov 2024 ☼", "shift to daylight")
-     , (2024, 11, 13, daylight,       'et', "Hamus 04 Hed 2017"         , "Wed 13 Nov 2024 ☼", "no problem")
-     , (2024, 11, 13, after-sunset,   'et', "Hamus 04 Hed 2017"         , "Wed 13 Nov 2024 ☼", "wrong intermediate date")
-     , (2024, 11, 13, before-sunrise, 'fr', "Tridi 23 Bru 0233"         , "Wed 13 Nov 2024 ☼", "shift to daylight")
-     , (2024, 11, 13, daylight,       'fr', "Tridi 23 Bru 0233"         , "Wed 13 Nov 2024 ☼", "no problem")
-     , (2024, 11, 13, after-sunset,   'fr', "Tridi 23 Bru 0233"         , "Wed 13 Nov 2024 ☼", "shift to daylight")
-     , (2024, 11, 13, before-sunrise, 'fa', "Tridi 23 Bru 0233"         , "Wed 13 Nov 2024 ☼", "shift to daylight")
-     , (2024, 11, 13, daylight,       'fa', "Tridi 23 Bru 0233"         , "Wed 13 Nov 2024 ☼", "no problem")
-     , (2024, 11, 13, after-sunset,   'fa', "Tridi 23 Bru 0233"         , "Wed 13 Nov 2024 ☼", "shift to daylight")
-     , (2024, 11, 13, before-sunrise, 'fe', "Tridi 23 Bru 0233"         , "Wed 13 Nov 2024 ☼", "shift to daylight")
-     , (2024, 11, 13, daylight,       'fe', "Tridi 23 Bru 0233"         , "Wed 13 Nov 2024 ☼", "no problem")
-     , (2024, 11, 13, after-sunset,   'fe', "Tridi 23 Bru 0233"         , "Wed 13 Nov 2024 ☼", "shift to daylight")
-     , (2024, 11, 13, before-sunrise, 'he', "Yom Reviʻi 12 Hes 5785"    , "Wed 13 Nov 2024 ☼", "shift to daylight")
-     , (2024, 11, 13, daylight,       'he', "Yom Reviʻi 12 Hes 5785"    , "Wed 13 Nov 2024 ☼", "no problem")
-     , (2024, 11, 13, after-sunset,   'he', "Yom Reviʻi 12 Hes 5785"    , "Wed 13 Nov 2024 ☼", "wrong intermediate date")
-     , (2024, 11, 13, before-sunrise, 'hi', "Yaum al-Arbi'a 11 J.A 1446", "Wed 13 Nov 2024 ☼", "shift to daylight")
-     , (2024, 11, 13, daylight,       'hi', "Yaum al-Arbi'a 11 J.A 1446", "Wed 13 Nov 2024 ☼", "no problem")
-     , (2024, 11, 13, after-sunset,   'hi', "Yaum al-Arbi'a 11 J.A 1446", "Wed 13 Nov 2024 ☼", "wrong intermediate date")
-     , (2024, 11, 13, before-sunrise, 'jl', "Wednesday 31 Oct 2024"     , "Wed 13 Nov 2024 ☼", "shift to daylight")
-     , (2024, 11, 13, daylight,       'jl', "Wednesday 31 Oct 2024"     , "Wed 13 Nov 2024 ☼", "no problem")
-     , (2024, 11, 13, after-sunset,   'jl', "Wednesday 31 Oct 2024"     , "Wed 13 Nov 2024 ☼", "shift to daylight")
-     , (2024, 11, 13, before-sunrise, 'jc', "Wednesday 31 Oct 2777"     , "Wed 13 Nov 2024 ☼", "shift to daylight")
-     , (2024, 11, 13, daylight,       'jc', "Wednesday 31 Oct 2777"     , "Wed 13 Nov 2024 ☼", "no problem")
-     , (2024, 11, 13, after-sunset,   'jc', "Wednesday 31 Oct 2777"     , "Wed 13 Nov 2024 ☼", "shift to daylight")
-     , (2024, 11, 13, before-sunrise, 'pe', "Chahar shanbe 23 Aba 1403" , "Wed 13 Nov 2024 ☼", "shift to daylight")
-     , (2024, 11, 13, daylight,       'pe', "Chahar shanbe 23 Aba 1403" , "Wed 13 Nov 2024 ☼", "no problem")
-     , (2024, 11, 13, after-sunset,   'pe', "Chahar shanbe 23 Aba 1403" , "Wed 13 Nov 2024 ☼", "shift to daylight")
-     , (2024, 11, 13, before-sunrise, 'pa', "Chahar shanbe 23 Aba 1403" , "Wed 13 Nov 2024 ☼", "shift to daylight")
-     , (2024, 11, 13, daylight,       'pa', "Chahar shanbe 23 Aba 1403" , "Wed 13 Nov 2024 ☼", "no problem")
-     , (2024, 11, 13, after-sunset,   'pa', "Chahar shanbe 23 Aba 1403" , "Wed 13 Nov 2024 ☼", "shift to daylight")
+       (2022,  5, 14, before-sunrise, 'ba', "Jalál 17 Jam 0179"       , "Sat 14 May 2022 ☼", "shift to daylight")
+     , (2022,  5, 14, daylight,       'ba', "Jalál 17 Jam 0179"       , "Sat 14 May 2022 ☼", "no problem")
+     , (2022,  5, 14, after-sunset,   'ba', "Jalál 17 Jam 0179"       , "Sat 14 May 2022 ☼", "shift to daylight")
+     , (2024, 12, 23, before-sunrise, 'be', "Kamál 13 Mal 0181"       , "Mon 23 Dec 2024 ☼", "shift to daylight")
+     , (2024, 12, 23, daylight,       'be', "Kamál 13 Mal 0181"       , "Mon 23 Dec 2024 ☼", "no problem")
+     , (2024, 12, 23, after-sunset,   'be', "Kamál 13 Mal 0181"       , "Mon 23 Dec 2024 ☼", "shift to daylight")
+     , (2023,  8, 22, before-sunrise, 'co', "Pshoment 16 Meo 1739"    , "Tue 22 Aug 2023 ☼", "shift to daylight")
+     , (2023,  8, 22, daylight,       'co', "Pshoment 16 Meo 1739"    , "Tue 22 Aug 2023 ☼", "no problem")
+     , (2023,  8, 22, after-sunset,   'co', "Pshoment 16 Meo 1739"    , "Tue 22 Aug 2023 ☼", "shift to daylight")
+     , (2022,  1, 17, before-sunrise, 'et', "Maksegno 09 Ter 2014"    , "Mon 17 Jan 2022 ☼", "shift to daylight")
+     , (2022,  1, 17, daylight,       'et', "Maksegno 09 Ter 2014"    , "Mon 17 Jan 2022 ☼", "no problem")
+     , (2022,  1, 17, after-sunset,   'et', "Maksegno 09 Ter 2014"    , "Mon 17 Jan 2022 ☼", "shift to daylight")
+     , (2024, 11, 13, before-sunrise, 'fr', "Tridi 23 Bru 0233"       , "Wed 13 Nov 2024 ☼", "shift to daylight")
+     , (2024, 11, 13, daylight,       'fr', "Tridi 23 Bru 0233"       , "Wed 13 Nov 2024 ☼", "no problem")
+     , (2024, 11, 13, after-sunset,   'fr', "Tridi 23 Bru 0233"       , "Wed 13 Nov 2024 ☼", "shift to daylight")
+     , (2022,  3, 30, before-sunrise, 'fa', "Décadi 10 Ger 0230"      , "Wed 30 Mar 2022 ☼", "shift to daylight")
+     , (2022,  3, 30, daylight,       'fa', "Décadi 10 Ger 0230"      , "Wed 30 Mar 2022 ☼", "no problem")
+     , (2022,  3, 30, after-sunset,   'fa', "Décadi 10 Ger 0230"      , "Wed 30 Mar 2022 ☼", "shift to daylight")
+     , (2023,  9, 22, before-sunrise, 'fe', "Quintidi 05 S-C 0231"    , "Fri 22 Sep 2023 ☼", "shift to daylight")
+     , (2023,  9, 22, daylight,       'fe', "Quintidi 05 S-C 0231"    , "Fri 22 Sep 2023 ☼", "no problem")
+     , (2023,  9, 22, after-sunset,   'fe', "Quintidi 05 S-C 0231"    , "Fri 22 Sep 2023 ☼", "shift to daylight")
+     , (2023,  7,  8, before-sunrise, 'he', "Yom Shabbat 19 Tam 5783" , "Sat 08 Jul 2023 ☼", "shift to daylight")
+     , (2023,  7,  8, daylight,       'he', "Yom Shabbat 19 Tam 5783" , "Sat 08 Jul 2023 ☼", "no problem")
+     , (2023,  7,  8, after-sunset,   'he', "Yom Shabbat 19 Tam 5783" , "Sat 08 Jul 2023 ☼", "shift to daylight")
+     , (2022,  8, 20, before-sunrise, 'hi', "Yaum al-Sabt 22 Muh 1444", "Sat 20 Aug 2022 ☼", "shift to daylight")
+     , (2022,  8, 20, daylight,       'hi', "Yaum al-Sabt 22 Muh 1444", "Sat 20 Aug 2022 ☼", "no problem")
+     , (2022,  8, 20, after-sunset,   'hi', "Yaum al-Sabt 22 Muh 1444", "Sat 20 Aug 2022 ☼", "shift to daylight")
+     , (2024, 10, 10, before-sunrise, 'jl', "Thursday 27 Sep 2024"    , "Thu 10 Oct 2024 ☼", "shift to daylight")
+     , (2024, 10, 10, daylight,       'jl', "Thursday 27 Sep 2024"    , "Thu 10 Oct 2024 ☼", "no problem")
+     , (2024, 10, 10, after-sunset,   'jl', "Thursday 27 Sep 2024"    , "Thu 10 Oct 2024 ☼", "shift to daylight")
+     , (2024,  6,  3, before-sunrise, 'jc', "Monday 21 May 2777"      , "Mon 03 Jun 2024 ☼", "shift to daylight")
+     , (2024,  6,  3, daylight,       'jc', "Monday 21 May 2777"      , "Mon 03 Jun 2024 ☼", "no problem")
+     , (2024,  6,  3, after-sunset,   'jc', "Monday 21 May 2777"      , "Mon 03 Jun 2024 ☼", "shift to daylight")
+     , (2022,  3,  6, before-sunrise, 'pe', "Yek-shanbe 15 Esf 1400"  , "Sun 06 Mar 2022 ☼", "shift to daylight")
+     , (2022,  3,  6, daylight,       'pe', "Yek-shanbe 15 Esf 1400"  , "Sun 06 Mar 2022 ☼", "no problem")
+     , (2022,  3,  6, after-sunset,   'pe', "Yek-shanbe 15 Esf 1400"  , "Sun 06 Mar 2022 ☼", "shift to daylight")
+     , (2022, 12, 12, before-sunrise, 'pa', "Do shanbe 21 Aza 1401"   , "Mon 12 Dec 2022 ☼", "shift to daylight")
+     , (2022, 12, 12, daylight,       'pa', "Do shanbe 21 Aza 1401"   , "Mon 12 Dec 2022 ☼", "no problem")
+     , (2022, 12, 12, after-sunset,   'pa', "Do shanbe 21 Aza 1401"   , "Mon 12 Dec 2022 ☼", "shift to daylight")
             );
 
-my %class =   ba => 'Date::Calendar::Bahai'
+my @data-maya = (
+       (2024,  4, 14, before-sunrise, 'm0', "15 Pop 2 Eb"           , "Sun 14 Apr 2024 ☼", "2024-04-14 wrong intermediate date, should be 14 Pop 2 Eb")
+     , (2024,  4, 14, daylight,       'm0', "15 Pop 2 Eb"           , "Sun 14 Apr 2024 ☼", "2024-04-14 no problem")
+     , (2024,  4, 14, after-sunset,   'm0', "15 Pop 2 Eb"           , "Sun 14 Apr 2024 ☼", "2024-04-14 wrong intermediate date, should be 15 Pop 3 Ben")
+     , (2022,  7,  8, before-sunrise, 'm1', "17 Tzec 4 Kan"         , "Fri 08 Jul 2022 ☼", "2022-07-08 wrong intermediate date, should be 16 Tzec 4 Kan")
+     , (2022,  7,  8, daylight,       'm1', "17 Tzec 4 Kan"         , "Fri 08 Jul 2022 ☼", "2022-07-08 no problem")
+     , (2022,  7,  8, after-sunset,   'm1', "17 Tzec 4 Kan"         , "Fri 08 Jul 2022 ☼", "2022-07-08 wrong intermediate date, should be 17 Tzec 5 Chicchan")
+     , (2024,  6,  7, before-sunrise, 'm2', " 8 Zotz 3 Chicchan"    , "Fri 07 Jun 2024 ☼", "2024-06-07 wrong intermediate date, should be  7 Zotz 3 Chicchan")
+     , (2024,  6,  7, daylight,       'm2', " 8 Zotz 3 Chicchan"    , "Fri 07 Jun 2024 ☼", "2024-06-07 no problem")
+     , (2024,  6,  7, after-sunset,   'm2', " 8 Zotz 3 Chicchan"    , "Fri 07 Jun 2024 ☼", "2024-06-07 wrong intermediate date, should be  8 Zotz 4 Cimi")
+     , (2024, 12, 11, before-sunrise, 'a0', "10 Tozoztontli 9 Acatl", "Wed 11 Dec 2024 ☼", "2024-12-11 wrong intermediate date, should be  9 Tozoztontli 9 Acatl")
+     , (2024, 12, 11, daylight,       'a0', "10 Tozoztontli 9 Acatl", "Wed 11 Dec 2024 ☼", "2024-12-11 no problem")
+     , (2024, 12, 11, after-sunset,   'a0', "10 Tozoztontli 9 Acatl", "Wed 11 Dec 2024 ☼", "2024-12-11 wrong intermediate date, should be 10 Tozoztontli 10 Ocelotl")
+     , (2023,  8, 20, before-sunrise, 'a1', " 4 Atemoztli 1 Ollin"  , "Sun 20 Aug 2023 ☼", "2023-08-20 wrong intermediate date, should be  3 Atemoztli 1 Ollin")
+     , (2023,  8, 20, daylight,       'a1', " 4 Atemoztli 1 Ollin"  , "Sun 20 Aug 2023 ☼", "2023-08-20 no problem")
+     , (2023,  8, 20, after-sunset,   'a1', " 4 Atemoztli 1 Ollin"  , "Sun 20 Aug 2023 ☼", "2023-08-20 wrong intermediate date, should be  4 Atemoztli 2 Tecpatl")
+            );
+
+my %class =   a0 => 'Date::Calendar::Aztec'
+            , a1 => 'Date::Calendar::Aztec::Cortes'
+            , ba => 'Date::Calendar::Bahai'
             , be => 'Date::Calendar::Bahai::Astronomical'
             , gr => 'Date::Calendar::Gregorian'
             , co => 'Date::Calendar::Coptic'
@@ -76,28 +101,38 @@ my %class =   ba => 'Date::Calendar::Bahai'
             , hi => 'Date::Calendar::Hijri'
             , jl => 'Date::Calendar::Julian'
             , jc => 'Date::Calendar::Julian::AUC'
+            , m0 => 'Date::Calendar::Maya'
+            , m1 => 'Date::Calendar::Maya::Astronomical'
+            , m2 => 'Date::Calendar::Maya::Spinden'
             , pe => 'Date::Calendar::Persian'
             , pa => 'Date::Calendar::Persian::Astronomical'
             ;
 
-
-my %ver   =   ba => '0.0.2'
+my %ver   =   a0 => '0.0.3'
+            , a1 => '0.0.3'
+            , ba => '0.0.2'
+            , pe => '0.0.2'
             , be => '0.0.2'
             , co => '0.0.3'
             , et => '0.0.3'
             , fr => '0.0.6'
             , fa => '0.0.6'
             , fe => '0.0.6'
-            , gr => '0.1.0'
+            , gr => '0.0.2'
             , he => '0.0.4'
             , hi => '0.0.2'
             , jl => '0.0.4'
             , jc => '0.0.4'
+            , m0 => '0.0.3'
+            , m1 => '0.0.3'
+            , m2 => '0.0.3'
             , pe => '0.0.2'
             , pa => '0.0.2'
             ;
+my Str $ver-gr = '0.1.0';
 
-plan 12 × @data.elems;
+plan 12 × @data.elems
+   + 12 × @data-maya.elems;
 
 for (@data) -> $datum {
   my ($year, $month, $day, $daypart, $cal, $str2, $str3, $result) = $datum;
@@ -109,12 +144,12 @@ for (@data) -> $datum {
   is($d2.^ver, %ver{$cal});
   my $d3 = $d2.to-date(%class<gr>);
   is($d3.strftime("%a %d %b %Y %Ep"), $str3, "testing push-push to $str2 and $str3, $result");
-  is($d3.^ver, %ver<gr>);
+  is($d3.^ver, $ver-gr);
 
   # push-pull
   my Date::Calendar::Gregorian $d4 .= new-from-date($d2);
   is($d4.strftime("%a %d %b %Y %Ep"), $str3, "testing push-pull to $str2 and $str3, $result");
-  is($d4.^ver, %ver<gr>);
+  is($d4.^ver, $ver-gr);
 
   # pull-push
   my $d5 = ::(%class{$cal}).new-from-date($d1);
@@ -122,12 +157,43 @@ for (@data) -> $datum {
   is($d5.^ver, %ver{$cal});
   my $d6 = $d5.to-date(%class<gr>);
   is($d6.strftime("%a %d %b %Y %Ep"), $str3, "testing pull-push to $str2 and $str3, $result");
-  is($d6.^ver, %ver<gr>);
+  is($d6.^ver, $ver-gr);
 
   # pull-pull
   my Date::Calendar::Gregorian $d7 .= new-from-date($d5);
   is($d7.strftime("%a %d %b %Y %Ep"), $str3, "testing pull-pull to $str2 and $str3, $result");
-  is($d7.^ver, %ver<gr>);
+  is($d7.^ver, $ver-gr);
+}
+
+for (@data-maya) -> $datum {
+  my ($year, $month, $day, $daypart, $cal, $str2, $str3, $result) = $datum;
+  my Date::Calendar::Gregorian $d1 .= new(year => $year, month => $month, day => $day, daypart => $daypart);
+
+  # push-push
+  my $d2 = $d1.to-date(%class{$cal});
+  is($d2.strftime("%e %B %V %A"), $str2, "testing push to $str2");
+  is($d2.^ver, %ver{$cal});
+  my $d3 = $d2.to-date(%class<gr>);
+  is($d3.strftime("%a %d %b %Y %Ep"), $str3, "testing push-push to $str2 and $str3, $result");
+  is($d3.^ver, $ver-gr);
+
+  # push-pull
+  my Date::Calendar::Gregorian $d4 .= new-from-date($d2);
+  is($d4.strftime("%a %d %b %Y %Ep"), $str3, "testing push-pull to $str2 and $str3, $result");
+  is($d4.^ver, $ver-gr);
+
+  # pull-push
+  my $d5 = ::(%class{$cal}).new-from-date($d1);
+  is($d5.strftime("%e %B %V %A"), $str2, "testing pull to $str2");
+  is($d5.^ver, %ver{$cal});
+  my $d6 = $d5.to-date(%class<gr>);
+  is($d6.strftime("%a %d %b %Y %Ep"), $str3, "testing pull-push to $str2 and $str3, $result");
+  is($d6.^ver, $ver-gr);
+
+  # pull-pull
+  my Date::Calendar::Gregorian $d7 .= new-from-date($d5);
+  is($d7.strftime("%a %d %b %Y %Ep"), $str3, "testing pull-pull to $str2 and $str3, $result");
+  is($d7.^ver, $ver-gr);
 }
 
 done-testing;
