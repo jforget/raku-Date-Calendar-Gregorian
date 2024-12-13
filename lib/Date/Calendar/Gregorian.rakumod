@@ -84,7 +84,7 @@ Here are two ways of printing the date 2020-04-05 in French.
 
 First, B<without> Date::Calendar::Gregorian
 
-=begin code :lang<perl6>
+=begin code :lang<raku>
 
 use Date::Names;
 use Date::Calendar::Strftime;
@@ -103,12 +103,40 @@ say $date.strftime("$day %d $month %Y");
 
 Second, B<with> Date::Calendar::Gregorian
 
-=begin code :lang<perl6>
+=begin code :lang<raku>
 
 use Date::Calendar::Gregorian;
 my  Date::Calendar::Gregorian $date .= new('2020-04-05', locale => 'fr');
 say $date.strftime("%A %d %B %Y");
 # --> dimanche 05 avril 2020
+
+=end code
+
+Another topic,  conversion with a  calendar, in this case,  a calendar
+which defines days as sunset-to-sunset
+
+=begin code :lang<raku>
+
+use Date::Calendar::Strftime;
+use Date::Calendar::Gregorian;
+use Date::Calendar::Hebrew;
+my  Date::Calendar::Gregorian $d-gr;
+my  Date::Calendar::Hebrew    $d-he;
+
+$d-gr .= new(year => 2024, month => 11, day => 13, daypart => before-sunrise());
+$d-he .= new-from-date($d-gr);
+say $d-he.strftime("%A %d %B %Y");
+# ---> "Yom Reviʻi 12 Heshvan 5785"
+
+$d-gr .= new(year => 2024, month => 11, day => 13, daypart => daylight());
+$d-he .= new-from-date($d-gr);
+say $d-he.strftime("%A %d %B %Y");
+# ---> "Yom Reviʻi 12 Heshvan 5785" again
+
+$d-gr .= new(year => 2024, month => 11, day => 13, daypart => after-sunset());
+$d-he .= new-from-date($d-gr);
+say $d-he.strftime("%A %d %B %Y");
+# ---> "Yom Chamishi 13 Heshvan 5785" instead of "Yom Reviʻi 12 Heshvan 5785"
 
 =end code
 
@@ -147,12 +175,12 @@ Actually, C<new> is the constructor for the parent core class C<Date>.
 Yet, every  form of this  multi-method accepts a  C<locale> parameter.
 All the variants below gives the same date, with different locales:
 
-=begin code :lang<perl6>
+=begin code :lang<raku>
 
 my Date::Calendar::Gregorian $d1 .= new('2020-02-02'                        , locale => 'fr');
 my Date::Calendar::Gregorian $d2 .= new( 2020, 2, 2                         , locale => 'es');
 my Date::Calendar::Gregorian $d3 .= new(year => 2020, month => 2, day => 2  , locale => 'de');
-my Date::Calendar::Gregorian $d4 .= new(Instant.from-posix(1580602000      ), locale => 'it');
+my Date::Calendar::Gregorian $d4 .= new(Instant.from-posix(1580602000)      , locale => 'it');
 my Date::Calendar::Gregorian $d5 .= new(DateTime.new('2020-02-02T12:00:00Z'), locale => 'nl');
 
 =end code
@@ -162,21 +190,25 @@ date would be converted to a calendar in which the days are defined as
 sunset-to-sunset. All five  variants of the C<new>  method accept this
 C<daypart> parameter.
 
-=begin code :lang<perl6>
+=begin code :lang<raku>
 
 my Date::Calendar::Gregorian $d1 .= new('2020-02-02'                        , daypart => before-sunrise);
-my Date::Calendar::Gregorian $d2 .= new( 2020, 2, 2                         , daypart => daylight);
-my Date::Calendar::Gregorian $d3 .= new(year => 2020, month => 2, day => 2  , daypart => after-sunset);
-my Date::Calendar::Gregorian $d4 .= new(Instant.from-posix(1580602000      ), daypart => before-sunrise);
-my Date::Calendar::Gregorian $d5 .= new(DateTime.new('2020-02-02T12:00:00Z'), daypart => after-sunset);
+my Date::Calendar::Gregorian $d2 .= new( 2020, 2, 2                         , daypart => daylight()    );
+my Date::Calendar::Gregorian $d3 .= new(year => 2020, month => 2, day => 2  , daypart => after-sunset());
+my Date::Calendar::Gregorian $d4 .= new(Instant.from-posix(1580602000)      , daypart => before-sunrise);
+my Date::Calendar::Gregorian $d5 .= new(DateTime.new('2020-02-02T22:00:00Z'), daypart => daylight()    );
 
 =end code
 
 Please note  that in  the last  two variants,  the module  ignores the
 timepart   from   the   C<Instant>    instance   and   the   substring
-C<"T12:00:00Z"> from the C<DateTime.new> parameter.
+C<"T22:00:00Z"> from the C<DateTime.new> parameter.
 
 =head2 Accessors
+
+=head3 daycount
+
+The MJD (Modified Julian Date) number for the date.
 
 =head3 daypart
 
@@ -229,7 +261,7 @@ C<Date::Names> for the availability of C<dow3>, C<dow2> and C<dowa>.
 Clones the  date into a C<Date::Calendar::>R<xxx>  compatible calendar
 class. The target class name is  given as a positional parameter. This
 parameter  is  optional,  the  default  value  is  C<"Date">  for  the
-Gregorian calendar, which  is not very useful but which  at least does
+Gregorian calendar, which  is not very useful in the present case, but which  at least does
 not depend on  which modules are installed on your  system and is sure
 to be available.
 
@@ -238,7 +270,7 @@ styles,  a "push"  conversion and  a "pull"  conversion. For  example,
 while  converting  "1st February  2020"  to  the French  Revolutionary
 calendar, you can code:
 
-=begin code :lang<perl6>
+=begin code :lang<raku>
 
 use Date::Calendar::Gregorian;
 use Date::Calendar::FrenchRevolutionary;
@@ -258,9 +290,9 @@ $d-dest-pull .= new-from-date($d-orig);
 Even  if both  calendars use  a C<locale>  attribute, when  a date  is
 created by  the conversion  of another  date, it  is created  with the
 default  locale. If  you  want the  locale to  be  transmitted in  the
-conversion, you should add this line:
+conversion, you should add a line such as:
 
-=begin code :lang<perl6>
+=begin code :lang<raku>
 
 $d-dest-pull.locale = $d-orig.locale;
 
@@ -272,7 +304,7 @@ This method is  very similar to the homonymous functions  you can find
 in several  languages (C, shell, etc).  It also takes some  ideas from
 C<printf>-similar functions. For example
 
-=begin code :lang<perl6>
+=begin code :lang<raku>
 
 $df.strftime("%04d blah blah blah %-25B")
 
@@ -419,9 +451,9 @@ uses of C<Date> into uses of C<Date::Calendar::Gregorian>.
 
 Another  issue,   as  explained  in   the  C<Date::Calendar::Strftime>
 documentation. Please ensure that  format-string passed to C<strftime>
-comes from  a trusted source.  For example, by including  a outrageous
-length in  a C<strftime> specifier, you  can drain your PC's  RAM very
-fast.
+comes from a trusted source.  Failing that, the mailcious source could
+include an outrageous  length in a C<strftime>  specifier, which would
+drain your PC's RAM very fast.
 
 =head2 Relations with :ver<0.0.x> classes
 
@@ -453,6 +485,7 @@ time and convert it to a C<daypart> parameter.
 =head2 Raku Software
 
 L<Date::Names|https://raku.land/zef:tbrowder/Date::Names>
+or L<https://github.com/tbrowder/Date-Names>
 
 L<Date::Calendar::Strftime|https://raku.land/zef:jforget/Date::Calendar::Strftime>
 or L<https://github.com/jforget/raku-Date-Calendar-Strftime>
@@ -508,6 +541,7 @@ L<https://www.cambridge.org/us/academic/subjects/computer-science/computing-gene
 
 I<La saga des calendriers>, by Jean Lefort, published by I<Belin> (I<Pour la Science>), ISBN 2-90929-003-5
 See L<https://www.belin-editeur.com/la-saga-des-calendriers>
+(the website seems to no longer respond).
 
 I<Le Calendrier>, by Paul Couderc, published by I<Presses universitaires de France> (I<Que sais-je ?>), ISBN 2-13-036266-4
 See L<https://catalogue.bnf.fr/ark:/12148/cb329699661>.

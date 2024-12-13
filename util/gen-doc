@@ -7,10 +7,11 @@
 export DOC=$THIS_DIR/doc
 
 raku --doc=HTML lib/Date/Calendar/Gregorian.rakumod > $DOC/Gregorian.html
+raku --doc=HTML util/gener-test-0.1.0.raku          > $DOC/Gregorian-gener-tests.html
 
 case $1 in
    --show)
      cd $DOC
-     firefox Gregorian.html
+     firefox Gregorian.html Gregorian-gener-tests.html
      ;;
 esac

@@ -10,7 +10,7 @@ Here are two ways of printing the date 2020-04-05 in French.
 
 First, __without__ Date::Calendar::Gregorian
 
-```perl6
+```
 use Date::Names;
 use Date::Calendar::Strftime;
 
@@ -27,7 +27,7 @@ say $date.strftime("$day %d $month %Y");
 
 Second, __with__ Date::Calendar::Gregorian
 
-```perl6
+```
 use Date::Calendar::Gregorian;
 my  Date::Calendar::Gregorian $date .= new('2020-04-05', locale => 'fr');
 say $date.strftime("%A %d %B %Y");

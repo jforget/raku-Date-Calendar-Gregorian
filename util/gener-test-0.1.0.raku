@@ -217,12 +217,9 @@ scripts C<xt/07-conv-old.rakutest> and C<xt/08-conv-new.rakutest>.
 
 In C<xt/07-conv-old.rakutest>,  fill the C<@data-maya> array  with the
 lines listing Maya and Aztec  dates and fill the C<@data-others> array
-with the lines listing other dates. Then cut the lines listing C<'gr'>
-dates  and  paste  them  into  the C<@data-greg>  array  and  add  the
-Gregorian date with  the 'YYYY-MM-AA' format at the end  of each array
-line.  Lastly, cut  (and do  not paste)  the lines  for the  Gregorian
-calendar  (which cannot  be simultaneously  version 0.0.2  and version
-0.1.0).
+with the lines  listing other dates. Then, cut (and  do not paste) the
+lines  for  the Gregorian  calendar  (which  cannot be  simultaneously
+version 0.0.2 and version 0.1.0).
 
 In C<xt/08-conv-new.rakutest>,  fill the C<@data-maya> array  with the
 lines listing  Maya and Aztec dates  and fill the C<@data>  array with
