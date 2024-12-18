@@ -216,9 +216,9 @@ A  number indicating  which part  of the  day. This  number should  be
 filled   and   compared   with   the   following   subroutines,   with
 self-documenting names:
 
-=item before-sunrise
-=item daylight
-=item after-sunset
+=item before-sunrise()
+=item daylight()
+=item after-sunset()
 
 =head3 locale
 
