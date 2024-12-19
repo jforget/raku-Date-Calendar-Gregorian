@@ -177,6 +177,7 @@ All the variants below gives the same date, with different locales:
 
 =begin code :lang<raku>
 
+use Date::Calendar::Gregorian;
 my Date::Calendar::Gregorian $d1 .= new('2020-02-02'                        , locale => 'fr');
 my Date::Calendar::Gregorian $d2 .= new( 2020, 2, 2                         , locale => 'es');
 my Date::Calendar::Gregorian $d3 .= new(year => 2020, month => 2, day => 2  , locale => 'de');
@@ -192,6 +193,8 @@ C<daypart> parameter.
 
 =begin code :lang<raku>
 
+use Date::Calendar::Strftime;
+use Date::Calendar::Gregorian;
 my Date::Calendar::Gregorian $d1 .= new('2020-02-02'                        , daypart => before-sunrise);
 my Date::Calendar::Gregorian $d2 .= new( 2020, 2, 2                         , daypart => daylight()    );
 my Date::Calendar::Gregorian $d3 .= new(year => 2020, month => 2, day => 2  , daypart => after-sunset());
@@ -284,6 +287,8 @@ $d-orig .= new(year  => 2020
              , day   =>    1);
 $d-dest-push  = $d-orig.to-date("Date::Calendar::FrenchRevolutionary");
 $d-dest-pull .= new-from-date($d-orig);
+say $d-orig, ' ', $d-dest-push, ' ', $d-dest-pull;
+# --> "2020-02-01 0228-05-13 0228-05-13"
 
 =end code
 
