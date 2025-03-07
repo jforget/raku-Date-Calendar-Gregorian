@@ -27,7 +27,7 @@ use Date::Calendar::Maya::Spinden;
 use Date::Calendar::Persian;
 use Date::Calendar::Persian::Astronomical;
 
-my $ver-gr = '0.1.0';
+my $ver-gr = '0.1.1';
 
 my @data = (
        (2022,  5, 14, before-sunrise, 'ba', "Jalál 17 Jam 0179 ☾"       , "Sat 14 May 2022 ☾", "2022-05-14 before sunrise")
